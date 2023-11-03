@@ -1,0 +1,25 @@
+services:
+  serge:
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    image: ws02/serge:beta
+    # image: ghcr.io/serge-chat/serge:latest
+    container_name: serge
+    restart: always
+    ports:
+      - 8008:8008
+    command: bash -c "/usr/src/app/deploy.sh"
+    # command: bash -c "cd /usr/src/app/api && uvicorn src.serge.main:app --host 0.0.0.0 --port 8008"
+    environment:
+      TZ: Asia/Taipei
+      LANG: C.UTF-8
+    volumes:
+      # - ./serge:/usr/src/app/api/src/serge:rw
+      - ./weights:/usr/src/app/weights
+      - ./datadb:/data/db/
+
+networks:
+  default:
+    external: true
+    name: airflow_default
